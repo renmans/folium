@@ -1,3 +1,4 @@
 *.yaml
 .env
+flask_session
 __pycache__

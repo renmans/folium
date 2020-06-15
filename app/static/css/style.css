@@ -1,0 +1,16 @@
+body {
+    background-color: #191923;
+    height: 100%;
+}
+
+.custom-form {
+    background-color: #a3525d;
+    top: 25vh;
+    border: 2px solid #fdca40;
+    border-radius: 5%;
+    padding: 2% 5%;
+}
+
+form > hr {
+    background-color: #fdca40;
+}
