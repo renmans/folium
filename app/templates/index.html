@@ -1,27 +1,38 @@
 {% extends "base.html" %}
 
-{% block title %}Sign In{% endblock %}
+{% block custom_styles %}
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+{% endblock %}
 
 {% block content %}
 <div class="container form-container">
     <div class="row justify-content-center">
-        <div class="col-11 col-sm-8 col-md-4 text-center text-white custom-form">
+        <div class="col-11 col-sm-8 col-md-6 col-lg-4 text-center text-white custom-form">
             <form>
                 <h3>Sign Up</h3>
                 <hr>
                 <div class="form-group">
-                    <label for="inputUsername">Username</label>
-                    <input type="text" class="form-control" id="inputUsername">
+                    {{ form.email.label }}
+                    <div class="w-100 my-0"></div>
+                    {{ form.email(size=25) }}
                 </div>
                 <div class="form-group">
-                    <label for="inputPassword">Password</label>
-                    <input type="password" class="form-control" id="inputPassword">
+                    {{ form.username.label }}
+                    <div class="w-100 my-0"></div>
+                    {{ form.username(size=25) }}
                 </div>
-                <div class="form-group form-check">
-                    <input type="checkbox" class="form-check-input" id="remember_me">
-                    <label class="form-check-label" for="check">Remember Me</label>
+                <div class="form-group">
+                    {{ form.password.label }}
+                    <div class="w-100 my-0"></div>
+                    {{ form.password(size=25) }}
                 </div>
-                <button type="submit" class="btn btn-outline-warning">Submit</button>
+                <div class="form-group form-check px-0">
+                    <span>
+                        {{ form.remember_me() }}
+                        {{ form.remember_me.label }}
+                    </span>
+                </div>
+                <button type="submit" class="btn btn-outline-warning">Sign Up</button>
             </form>
         </div>
     </div>
