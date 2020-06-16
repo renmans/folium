@@ -1,9 +1,9 @@
-import requests
+# import requests
 
 from config import Config
 from forms import LoginForm
 
-from flask import Flask, session, render_template, request
+from flask import Flask, render_template, request  # , session
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -25,9 +25,19 @@ db = scoped_session(sessionmaker(bind=engine))
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
+    form = LoginForm()
     if request.method == 'POST':
         pass
-    return render_template("index.html", title="Sign Up", form=LoginForm())
+    # return render_template("index.html", title="Sign Up", form=form)
+    return render_template("form.html", title="Sign Up", form=form,
+                           action="Sign Up")
+
+
+@app.route("/login")
+def login():
+    form = LoginForm()
+    return render_template("form.html", title="Sign Up", form=form,
+                           action="Log In")
 
 
 if __name__ == "__main__":

@@ -1,12 +1,12 @@
 body {
-    background-color: #191923;
+    background-color: #e5e5e5;
     height: 100%;
 }
 
 .custom-form {
     background-color: #a3525d;
-    top: 25vh;
-    border: 2px solid #fdca40;
+    top: 20vh;
+    border: 2px solid #333533;
     border-radius: 5%;
     padding: 2% 5%;
 }
