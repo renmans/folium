@@ -1,7 +1,6 @@
 import requests
 
-from yaml import safe_load
-
+from config import Config
 from forms import LoginForm
 
 from flask import Flask, session, render_template, request
@@ -12,8 +11,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 app = Flask(__name__)
 
 # Load configuration
-with open("../.env/config.yaml", "r") as f:
-    conf = safe_load(f)
+app.config.from_object(Config)
 
 # Configure session to use filesystem
 app.config["SESSION_PERMANENT"] = False
@@ -21,11 +19,8 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # Set up database
-engine = create_engine(conf["database"]["URI"])
+engine = create_engine(app.config["DB_URL"])
 db = scoped_session(sessionmaker(bind=engine))
-
-# Configure secret key
-app.config["SECRET_KEY"] = conf["SECRET_KEY"]
 
 
 @app.route("/", methods=['GET', 'POST'])
