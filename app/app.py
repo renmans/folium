@@ -54,6 +54,7 @@ def index():
                                    action=action)
         # TODO: Access only for auth users
         session['user'] = username
+        print(username)
         return redirect(url_for('search', name=username))
     return render_template("index.html", title=action, form=form,
                            action=action)
@@ -64,25 +65,34 @@ def login():
     # TODO: check for session - if user logged in redirect to /search
     action = "Log In"  # Content for buttons and forms
     form = LoginForm()
-    if request.method == "POST":
-        if form.validate_on_submit():
-            email = form.email.data
-            password = passwd_hash(form.password.data)
-            username = db.execute("""SELECT username FROM users WHERE
-                                  email = :email AND password = :password""",
-                                  {"email": email, "password": password}
-                                  ).fetchone()
-            if username:
-                session['user'] = username
-                return redirect(url_for('search', name=username))
+    if form.validate_on_submit():
+        email = form.email.data
+        password = passwd_hash(form.password.data)
+        username = db.execute("""SELECT username FROM users WHERE
+                              email = :email AND password = :password""",
+                              {"email": email, "password": password}
+                              ).fetchone()[0]
+        if username:
+            session['user'] = username
+            print(username)
+            return redirect(url_for('search', name=username))
 
     return render_template("index.html", title=action, form=form,
                            action=action)
 
 
-@app.route("/<name>/search", methods=['GET'])
+@app.route("/<name>/search", methods=['GET', 'POST'])
 def search(name):
-    return render_template("search.html", name=name)
+    # if user is not auth then redirect them to login page
+    if session['user'] != name:
+        return redirect(url_for('login'))
+    if request.method == 'POST':
+        search_req = request.form.get('search')
+        s = '%' + search_req + '%'
+        books = db.execute("""SELECT * FROM books WHERE isbn LIKE :s OR title
+                           LIKE :s OR author LIKE :s""", {"s": s}).fetchall()
+        print(books)
+    return render_template("search.html", name=name, title="Search")
 
 
 if __name__ == "__main__":

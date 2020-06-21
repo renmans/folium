@@ -13,7 +13,3 @@ class LoginForm(FlaskForm):
 
 class SignUpForm(LoginForm):
     username = StringField('Username', [DataRequired(), Length(min=4, max=25)])
-
-
-class SearchForm(FlaskForm):
-    pass
