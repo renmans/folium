@@ -28,15 +28,17 @@ def index():
     form = LoginForm()
     if form.validate_on_submit():
         pass
-    return render_template("index.html", title="Sign Up", form=form,
-                           action="Sign Up")
+    action = "Sign Up"
+    return render_template("index.html", title=action, form=form,
+                           action=action)
 
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    return render_template("index.html", title="Log In", form=form,
-                           action="Log In")
+    action = "Log In"
+    return render_template("index.html", title=action, form=form,
+                           action=action)
 
 
 if __name__ == "__main__":
