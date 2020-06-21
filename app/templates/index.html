@@ -9,20 +9,21 @@
     <div class="row justify-content-center">
         <div class="col-11 col-sm-8 col-md-6 col-lg-4 text-center text-white custom-form">
             <form action="" method="post" novalidate>
+                {{ form.csrf_token }}
                 <h3>{{ action }}</h3>
                 <hr>
-                {% if action == "Sign Up" %}
                 <div class="form-group">
                     {{ form.email.label }}
                     <div class="w-100 my-0"></div>
                     {{ form.email(size=25) }}
                 </div>
-                {% endif %}
+                {% if action == "Sign Up" %}
                 <div class="form-group">
                     {{ form.username.label }}
                     <div class="w-100 my-0"></div>
                     {{ form.username(size=25) }}
                 </div>
+                {% endif %}
                 <div class="form-group">
                     {{ form.password.label }}
                     <div class="w-100 my-0"></div>
@@ -45,6 +46,11 @@
                 {% endif %}
                 </a>
             </form>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <p class="mt-3 mb-0">{{ messages[0] }}</p>
+                {% endif %}
+            {% endwith %}
         </div>
     </div>
 </div>

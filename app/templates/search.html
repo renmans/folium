@@ -1,8 +1,17 @@
 {% extends "base.html" %}
 
+{% block custom_styles %}
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+{% endblock %}
+
 {% block content %}
-<div class="container">
+{% if name != session['user'] %}
+    <p>Check</p>
+{% else %}
+<div class="container text-center">
+    <br>
     <h3><strong>Find The Book</strong></h3>
+    <hr>
     <div class="input-group">
         <input type="text" class="form-control" placeholder="ISBN, Title or Author" 
             aria-label="Book search" aria-describedby="search-form">
@@ -11,4 +20,5 @@
         </div>
     </div>
 </div>
+{% endif %}
 {% endblock %}
