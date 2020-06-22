@@ -27,6 +27,8 @@ db = scoped_session(sessionmaker(bind=engine))
 
 
 def passwd_hash(p):
+    # hashing password and convert it to hex number
+    # password in range from 6 to 40 char's
     return sha256(p.encode('utf-8')).hexdigest()
 
 
@@ -40,8 +42,6 @@ def index():
 
     form = SignUpForm()
     if form.validate_on_submit():
-        # hashing password and convert it to hex number
-        # password in range from 6 to 40 char's
         email = form.email.data
         username = form.username.data
         password = passwd_hash(form.password.data)
@@ -57,9 +57,7 @@ def index():
             return render_template("index.html", title=action, form=form,
                                    action=action)
 
-        # TODO: Access only for auth users
         session['user'] = username
-        print(username)
         return redirect(url_for('search', name=username))
 
     return render_template("index.html", title=action, form=form,
@@ -84,7 +82,6 @@ def login():
                               ).fetchone()[0]
         if username:
             session['user'] = username
-            print(username)
             return redirect(url_for('search', name=username))
 
     return render_template("index.html", title=action, form=form,
@@ -96,7 +93,6 @@ def search(name):
     # if user is not auth then redirect them to login page
     if session['user'] != name:
         return redirect(url_for('login'))
-
     form = SearchForm()
     if form.validate_on_submit():
         search_query = form.query.data
@@ -108,6 +104,12 @@ def search(name):
                                form=form, books=books)
 
     return render_template("search.html", name=name, title="Search", form=form)
+
+
+@app.route("/logout")
+def logout():
+    session.pop("user", None)
+    return redirect(url_for("index"))
 
 
 if __name__ == "__main__":

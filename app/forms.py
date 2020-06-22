@@ -16,5 +16,8 @@ class SignUpForm(LoginForm):
 
 
 class SearchForm(FlaskForm):
-    query = StringField('Search Query', [DataRequired()])
+    query = StringField('Search Query', [DataRequired()], render_kw={
+        "placeholder": "ISBN, Title or Author",
+        "class": "form-control"
+    })
     search = SubmitField('Search')

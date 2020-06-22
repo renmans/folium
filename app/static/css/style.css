@@ -9,3 +9,9 @@
 hr {
     background-color: #fdca40;
 }
+
+.form-center {
+    left: 0;
+    right: 0;
+    margin: auto;  
+}
