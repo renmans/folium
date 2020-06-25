@@ -12,11 +12,11 @@ flask run
 ```
 
 ## TODO
-* Registration
-* Login
-* Logout
-* Import
-* Search
+* ~~Registration~~
+* ~~Login~~
+* ~~Logout~~
+* ~~Import~~
+* ~~Search~~
 * Book Page
 * Review Submission
 * Goodreads Review Data
