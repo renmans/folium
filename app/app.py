@@ -32,11 +32,18 @@ def passwd_hash(p):
     return sha256(p.encode('utf-8')).hexdigest()
 
 
+def check_session():
+    # Redirect if user not logged out
+    try:
+        if session['user']:
+            return redirect(url_for('search', name=session['user']))
+    except KeyError:
+        session['user'] = None
+
+
 @app.route("/", methods=['GET', 'POST'])
 def index():
-    # Redirect if user not logged out
-    if session['user']:
-        return redirect(url_for('search', name=session['user']))
+    check_session()
 
     action = "Sign Up"  # Content for buttons and forms
 
@@ -66,9 +73,7 @@ def index():
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
-    # Redirect if user not logged out
-    if session['user']:
-        return redirect(url_for('search', name=session['user']))
+    check_session()
 
     action = "Log In"  # Content for buttons and forms
 
@@ -76,13 +81,18 @@ def login():
     if form.validate_on_submit():
         email = form.email.data
         password = passwd_hash(form.password.data)
-        username = db.execute("""SELECT username FROM users WHERE
-                              email = :email AND password = :password""",
-                              {"email": email, "password": password}
-                              ).fetchone()[0]
+        try:
+            username = db.execute("""SELECT username FROM users WHERE
+                                  email = :email AND password = :password""",
+                                  {"email": email, "password": password}
+                                  ).fetchone()[0]
+        except TypeError:
+            username = None
         if username:
             session['user'] = username
             return redirect(url_for('search', name=username))
+        else:
+            flash("Wrong email or password")
 
     return render_template("index.html", title=action, form=form,
                            action=action)

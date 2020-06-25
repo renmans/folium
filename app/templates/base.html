@@ -8,16 +8,16 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="../static/css/base.css">
-    
+
     {% block custom_styles %}
     {% endblock %}
 
     <title>
-    {% if title %}
+        {% if title %}
         Folium - {{ title }}
-    {% else %}
+        {% else %}
         Folium
-    {% endif %}
+        {% endif %}
     </title>
 </head>
 
@@ -25,7 +25,30 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark sticky-top justify-content-md-center 
             navbar-color">
-            <a class="navbar-brand mx-0" href={{ url_for('index') }}><strong>Folium</strong></a>
+            <a class="navbar-brand" href={{ url_for('index') }}><strong>Folium</strong></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <!-- <li class="nav-item" display="none">
+                    </li> -->
+                </ul>
+                {% if action %}
+                <form class="form-inline my-2 my-lg-0">
+                    <a class="btn btn-outline-warning my-2 my-sm-0 mx-1" role="button" href={{ url_for('index') }}>Sign
+                        Up</a>
+                    <a class="btn btn-outline-warning my-2 my-sm-0 mx-1" role="button" href={{ url_for('login') }}>Log
+                        In</a>
+                </form>
+                {% else %}
+                <form class="form-inline my-2 my-lg-0">
+                    <a class="btn btn-outline-warning my-2 my-sm-0" role="button" href={{ url_for('logout') }}>Log
+                        Out</a>
+                </form>
+                {% endif %}
+            </div>
         </nav>
     </header>
     {% block content %}
