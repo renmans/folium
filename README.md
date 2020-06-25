@@ -19,5 +19,6 @@ flask run
 * ~~Search~~
 * Book Page
 * Review Submission
+* Star Rating
 * Goodreads Review Data
 * API Access

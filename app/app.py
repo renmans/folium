@@ -124,7 +124,8 @@ def logout():
 
 @app.route("/book/<int:book_id>")
 def book(book_id):
-    return render_template('book.html', title=book_id)
+    book_data = db.execute("""SELECT * FROM books WHERE id = :id;""", {"id": book_id}).fetchone()
+    return render_template('book.html', title=book_data['title'], book=book_data)
 
 
 if __name__ == "__main__":
