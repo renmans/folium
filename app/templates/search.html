@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block custom_styles %}
-    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+<link rel="stylesheet" type="text/css" href="../static/css/style.css">
 {% endblock %}
 
 {% block content %}
@@ -17,19 +17,36 @@
             name="search" aria-label="Book search" aria-describedby="search-form">
             -->
             <div class="form-group">
-            {{ form.query }}
+                {{ form.query }}
             </div>
             <button class="btn btn-warning mx-2" type="submit" id="search-form">
                 Search
             </button>
         </form>
     </div>
-    <ul>
-    {% if books %}
-        {% for book in books %}
-            <li>{{ book }}</li>    
-        {% endfor %}
-    {% endif %}
-    </ul>
+    <div class="container">
+        {% if books %}
+        <table class="table table-striped table-responsive-sm">
+            <thead>
+                <tr class="books-table">
+                    <th scope="col">ISBN</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Author</th>
+                    <th scope="col">Year</th>
+                </tr>
+            </thead>
+            <tbody class="table-light">
+                {% for book in books %}
+                <tr>
+                    <th scope="col">{{ book.isbn }}</th>
+                    <th scope="col"><a href={{ url_for('book', book_id=book.id) }}>{{ book.title }}</a></th>
+                    <th scope="col">{{ book.author }}</th>
+                    <th scope="col">{{ book.year }}</th>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}

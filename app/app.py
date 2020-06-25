@@ -122,5 +122,10 @@ def logout():
     return redirect(url_for("index"))
 
 
+@app.route("/book/<int:book_id>")
+def book(book_id):
+    return render_template('book.html', title=book_id)
+
+
 if __name__ == "__main__":
     app.run(debug=True)
