@@ -23,8 +23,7 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark sticky-top justify-content-md-center 
-            navbar-color">
+        <nav class="navbar navbar-expand-lg navbar-dark sticky-top navbar-color">
             <svg class="bi bi-book mx-1" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="#fdca40"
                 xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd"
@@ -32,20 +31,28 @@
                 <path fill-rule="evenodd"
                     d="M12.786 1.072C11.188.752 9.084.71 7.646 2.146A.5.5 0 0 0 7.5 2.5v11a.5.5 0 0 0 .854.354c.843-.844 2.115-1.059 3.47-.92 1.344.14 2.66.617 3.452 1.013A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.276-.447L15.5 2.5l.224-.447-.002-.001-.004-.002-.013-.006-.047-.023a12.582 12.582 0 0 0-.799-.34 12.96 12.96 0 0 0-2.073-.609zM15 2.82v9.908c-.846-.343-1.944-.672-3.074-.788-1.143-.118-2.387-.023-3.426.56V2.718c1.063-.929 2.631-.956 4.09-.664A11.956 11.956 0 0 1 15 2.82z" />
             </svg>
-            <p class="navbar-brand my-0"><strong>Folium</strong></p>
+            <p class="navbar-brand my-0 mr-auto"><strong>Folium</strong></p>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="collapse ml-lg-3 navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <!-- <li class="nav-item" display="none">
-                    </li> -->
+                    {% if not action %}
+                    <li class="nav-item">
+                        <a href={{ url_for('search') }} class="nav-link text-light">Search</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link text-light">Reviews</a>
+                    </li>
+                    {% endif %}
                 </ul>
                 {% if action %}
                 <form class="form-inline my-2 my-lg-0">
                     <a class="btn btn-outline-warning my-2 my-sm-0 mx-1" role="button" href={{ url_for('index') }}>Sign
                         Up</a>
+                </form>
+                <form class="form-inline my-2 my-lg-0">
                     <a class="btn btn-outline-warning my-2 my-sm-0 mx-1" role="button" href={{ url_for('login') }}>Log
                         In</a>
                 </form>

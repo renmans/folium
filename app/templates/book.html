@@ -5,5 +5,22 @@
 {% endblock %}
 
 {% block content %}
-    {{ book }}
+<div class="container">
+    <div class="card border-dark my-3 mx-auto text-center" style="max-width: 18rem;">
+        <div class="card-header custom-card">
+            <strong>{{ book.title }}</strong>
+        </div>
+        <div class="card-body">
+            <div class="card-title lead">
+                {{ book.author }}
+            </div>
+            <div class="text-muted">
+                {{ book.year }}
+            </div>
+        </div>
+        <div class="card-footer custom-card text-light">
+            {{ book.isbn }}
+        </div>
+    </div>
+</div>
 {% endblock %}

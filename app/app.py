@@ -98,11 +98,21 @@ def login():
                            action=action)
 
 
-@app.route("/<name>/search", methods=['GET', 'POST'])
-def search(name):
+@app.route("/search")
+@app.route("/search/<name>", methods=['GET', 'POST'])
+def search(name=None):
+    # name is None when link is clicked
+    if name is None:
+        try:
+            if session['user']:
+                return redirect(url_for('search', name=session['user']))
+        except KeyError:
+            return redirect(url_for('login'))
+    
     # if user is not auth then redirect them to login page
     if session['user'] != name:
         return redirect(url_for('login'))
+
     form = SearchForm()
     if form.validate_on_submit():
         search_query = form.query.data
@@ -124,7 +134,8 @@ def logout():
 
 @app.route("/book/<int:book_id>")
 def book(book_id):
-    book_data = db.execute("""SELECT * FROM books WHERE id = :id;""", {"id": book_id}).fetchone()
+    book_data = db.execute(
+        """SELECT * FROM books WHERE id = :id;""", {"id": book_id}).fetchone()
     return render_template('book.html', title=book_data['title'], book=book_data)
 
 
