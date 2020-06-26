@@ -11,13 +11,18 @@ set SECRET_KEY = Your secret key or os.urandom(<int>)
 flask run
 ```
 
+## Demo
+![Log In](/app/static/img/login.png)
+
+![Search](/app/static/img/search.png)
+
 ## TODO
 * ~~Registration~~
 * ~~Login~~
 * ~~Logout~~
 * ~~Import~~
 * ~~Search~~
-* Book Page
+* ~~Book Page~~
 * Review Submission
 * Star Rating
 * Goodreads Review Data
