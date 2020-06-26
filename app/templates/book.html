@@ -6,11 +6,12 @@
 
 {% block content %}
 <div class="container">
-    <div class="card border-dark my-3 mx-auto text-center" style="max-width: 18rem;">
+    <!-- <div class="card border-dark my-3 mx-auto text-center" style="max-width: 18rem;">
         <div class="card-header custom-card">
             <strong>{{ book.title }}</strong>
         </div>
         <div class="card-body">
+            <img src="http://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg" class="card-img">
             <div class="card-title lead">
                 {{ book.author }}
             </div>
@@ -20,6 +21,27 @@
         </div>
         <div class="card-footer custom-card text-light">
             {{ book.isbn }}
+        </div>
+    </div> -->
+    <div class="card mx-auto border-dark my-2 text-center" style="max-width: 540px;">
+        <div class="row no-gutters">
+            <div class="col-md-4">
+                <img src="http://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg" class="card-img">
+            </div>
+            <div class="col-md-8 my-auto">
+                <div class="card-body">
+                    <h5 class="card-title">{{ book.title }}</h5>
+                    <p class="card-text">by {{ book.author }}</p>
+                    <p class="card-text">published {{ book.year }}</p>
+                    <p class="card-text"><small class="text-dark">ISBN: {{ book.isbn }}</small></p>
+                    <p class="card-text">
+                        <a class="text-dark" href="https://www.goodreads.com/search?q={{ book.title }}">
+                            <u>GoodReads</u>
+                        </a>
+                    </p>
+                    <p class="card-text">Rating: 5</p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
