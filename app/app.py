@@ -108,7 +108,7 @@ def search(name=None):
                 return redirect(url_for('search', name=session['user']))
         except KeyError:
             return redirect(url_for('login'))
-    
+
     # if user is not auth then redirect them to login page
     if session['user'] != name:
         return redirect(url_for('login'))
@@ -134,9 +134,17 @@ def logout():
 
 @app.route("/book/<int:book_id>")
 def book(book_id):
-    book_data = db.execute(
-        """SELECT * FROM books WHERE id = :id;""", {"id": book_id}).fetchone()
-    return render_template('book.html', title=book_data['title'], book=book_data)
+    try:
+        if session['user']:
+            book_data = db.execute(
+                """SELECT * FROM books WHERE id = :id;""",
+                {"id": book_id}).fetchone()
+            return render_template('book.html', title=book_data['title'],
+                                   book=book_data)
+        else:
+            return redirect(url_for('login'))
+    except KeyError:
+        return redirect(url_for('login'))
 
 
 if __name__ == "__main__":

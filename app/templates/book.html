@@ -6,26 +6,9 @@
 
 {% block content %}
 <div class="container">
-    <!-- <div class="card border-dark my-3 mx-auto text-center" style="max-width: 18rem;">
-        <div class="card-header custom-card">
-            <strong>{{ book.title }}</strong>
-        </div>
-        <div class="card-body">
-            <img src="http://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg" class="card-img">
-            <div class="card-title lead">
-                {{ book.author }}
-            </div>
-            <div class="text-muted">
-                {{ book.year }}
-            </div>
-        </div>
-        <div class="card-footer custom-card text-light">
-            {{ book.isbn }}
-        </div>
-    </div> -->
-    <div class="card mx-auto border-dark my-2 text-center" style="max-width: 540px;">
+    <div class="card mx-auto border-dark my-2 text-center" style="max-width: 500px;">
         <div class="row no-gutters">
-            <div class="col-md-4">
+            <div class="col-md-4 mx-auto my-auto">
                 <img src="http://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg" class="card-img">
             </div>
             <div class="col-md-8 my-auto">
@@ -43,6 +26,10 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="container text-center">
+        <hr>
+        <h3><strong>Reviews</strong></h3>
     </div>
 </div>
 {% endblock %}
