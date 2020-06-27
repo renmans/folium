@@ -1,3 +1,7 @@
+# TODO: Refactoring
+# TODO: Write decorator for required login
+# TODO: Write documentation for functions
+
 import os
 import requests
 from hashlib import sha256
@@ -34,6 +38,7 @@ def passwd_hash(p):
 
 def check_session():
     # Redirect if user not logged out
+    # TODO: REPLACE WITH DECORATOR
     try:
         if session['user']:
             return redirect(url_for('search', name=session['user']))
@@ -52,6 +57,7 @@ def goodreads_rating(isbn):
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
+    # TODO: REPLACE WITH DECORATOR
     check_session()
 
     action = "Sign Up"  # Content for buttons and forms
@@ -82,6 +88,7 @@ def index():
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
+    # TODO: REPLACE WITH DECORATOR
     check_session()
 
     action = "Log In"  # Content for buttons and forms
@@ -111,6 +118,7 @@ def login():
 @app.route("/search/<name>", methods=['GET', 'POST'])
 def search(name=None):
     # name is None when link is clicked
+    # TODO: REPLACE WITH DECORATOR
     if name is None:
         try:
             if session['user']:
@@ -119,6 +127,7 @@ def search(name=None):
             return redirect(url_for('login'))
 
     # if user is not auth then redirect them to login page
+    # TODO: REPLACE WITH DECORATOR
     if session['user'] != name:
         return redirect(url_for('login'))
 
@@ -126,6 +135,7 @@ def search(name=None):
     if form.validate_on_submit():
         search_query = form.query.data
         s = '%' + search_query + '%'
+        # TODO: Make a separate function
         books = db.execute("""SELECT * FROM books WHERE (isbn LIKE :s) OR
                            (title LIKE :s) OR
                            (author LIKE :s);""", {"s": s}).fetchall()
@@ -137,36 +147,42 @@ def search(name=None):
 
 @app.route("/logout")
 def logout():
-    session.pop("user", None)
+    session.clear()
     return redirect(url_for("index"))
 
 
 @app.route("/book/<int:book_id>", methods=['GET', 'POST'])
 def book(book_id):
+    # TODO: REPLACE WITH DECORATOR
     try:
         if session['user']:
             pass
     except KeyError:
         return redirect(url_for('login'))
 
+    # TODO: Make a separate function
     book_data = db.execute("""SELECT * FROM books WHERE id = :id;""",
                            {"id": book_id}).fetchone()
     book_id = book_data['id']
 
+    # TODO: Make a separate function
     uid = db.execute("""SELECT id FROM users WHERE username = :username;""",
                      {"username": session['user']}).fetchone()[0]
 
+    # TODO: Make a separate function
     reviews_counter = int(db.execute("""SELECT COUNT(*) FROM reviews
                                      WHERE (book_id = :bid)
                                      AND (user_id = :uid);""",
                                      {"bid": book_id,
                                       "uid": uid}).fetchone()[0])
 
+    # TODO: Make a separate function
     avg_rating = db.execute("""SELECT AVG(rating) FROM reviews
                             WHERE book_id = :book_id""", {"book_id": book_id}
                             ).fetchone()[0]
     avg_rating = round(float(avg_rating), 2) if avg_rating else 0
 
+    # TODO: Make a separate function
     reviews = db.execute("""SELECT * FROM reviews WHERE book_id = :id""",
                          {"id": book_id})
 
@@ -177,6 +193,7 @@ def book(book_id):
         if reviews_counter == 0:
             review = form.review.data
             rating = int(form.rating.data)
+            # TODO: Make a separate function
             db.execute("""INSERT INTO reviews (user_id, book_id, review,
                        rating) VALUES (:uid, :book_id, :review, :rating)""",
                        {"uid": uid, "book_id": book_id, "review": review,
