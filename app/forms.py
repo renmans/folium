@@ -30,7 +30,8 @@ class ReviewForm(FlaskForm):
         "id": "reviewForm",
         "rows": "3"
     })
-    rating = SelectField("Rating", choices=[i for i in range(1, 6)],
+    rating = SelectField("Rating",
+                         choices=[(str(i), str(i)) for i in range(1, 6)],
                          validators=[DataRequired()], render_kw={
                              "class": "form-control",
                              "id": "ratingForm"

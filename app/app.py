@@ -132,21 +132,50 @@ def logout():
     return redirect(url_for("index"))
 
 
-@app.route("/book/<int:book_id>")
+@app.route("/book/<int:book_id>", methods=['GET', 'POST'])
 def book(book_id):
-    form = ReviewForm()
-
     try:
         if session['user']:
-            book_data = db.execute(
-                """SELECT * FROM books WHERE id = :id;""",
-                {"id": book_id}).fetchone()
-            return render_template('book.html', title=book_data['title'],
-                                   book=book_data, form=form)
-        else:
-            return redirect(url_for('login'))
+            pass
     except KeyError:
         return redirect(url_for('login'))
+
+    book_data = db.execute("""SELECT * FROM books WHERE id = :id;""",
+                           {"id": book_id}).fetchone()
+    book_id = book_data['id']
+    uid = db.execute("""SELECT id FROM users WHERE username = :username;""",
+                     {"username": session['user']}).fetchone()[0]
+
+    reviews_counter = int(db.execute("""SELECT COUNT(*) FROM reviews
+                                     WHERE (book_id = :bid)
+                                     AND (user_id = :uid);""",
+                                     {"bid": book_id,
+                                      "uid": uid}).fetchone()[0])
+
+    avg_rating = round(float(db.execute("""SELECT AVG(rating) FROM reviews
+                                        WHERE book_id = :book_id""", {
+                                            "book_id": book_id
+                                        }).fetchone()[0]), 2)
+
+    form = ReviewForm()
+    if form.validate_on_submit():
+        if reviews_counter == 0:
+            review = form.review.data
+            rating = int(form.rating.data)
+            db.execute("""INSERT INTO reviews (user_id, book_id, review,
+                       rating) VALUES (:uid, :book_id, :review, :rating)""",
+                       {"uid": uid, "book_id": book_id, "review": review,
+                        "rating": rating})
+            db.commit()
+        else:
+            flash("You have already left a review")
+
+    reviews = db.execute("""SELECT * FROM reviews WHERE book_id = :id""",
+                         {"id": book_id})
+
+    return render_template('book.html', title=book_data['title'],
+                           book=book_data, form=form, reviews=reviews,
+                           rating=avg_rating)
 
 
 if __name__ == "__main__":

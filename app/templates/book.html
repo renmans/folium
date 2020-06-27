@@ -17,12 +17,15 @@
                     <p class="card-text">by {{ book.author }}</p>
                     <p class="card-text">published {{ book.year }}</p>
                     <p class="card-text"><small class="text-dark">ISBN: {{ book.isbn }}</small></p>
+                    <p class="card-text">Rating: {{ rating }}</p>
                     <p class="card-text">
                         <a class="text-dark" href="https://www.goodreads.com/search?q={{ book.title }}">
-                            <u>GoodReads</u>
+                            <u>
+                                GoodReads: 5
+                                <span class="text-muted">[20]</span>
+                            </u>
                         </a>
                     </p>
-                    <p class="card-text">Rating: 5</p>
                 </div>
             </div>
         </div>
@@ -33,6 +36,11 @@
         <hr>
     </div>
     <div class="container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <p class="lead text-center text-danger">{{ messages[0] }}</p>
+            {% endif %}
+        {% endwith %}
         <form action="" method="post" novalidate>
             {{ form.csrf_token }}
             <div class="form-group text-center">
@@ -48,6 +56,11 @@
             </div>
         </form>
         <hr>
+        {% if reviews %}
+            {% for review in reviews %}
+                {{ review }}
+            {% endfor %}
+        {% endif %}
     </div>
 </div>
 {% endblock %}
