@@ -55,7 +55,16 @@
         <hr>
         {% if reviews %}
             {% for review in reviews %}
-                {{ review }}
+                <div class="card text-center mb-2">
+                    <div class="card-header">
+                        <strong><em>{{ review.username }}</em></strong> 
+                        rated it {{ review.rating }}
+                    </div>
+                    <div class="card-body lead">
+                        {{ review.review }}
+                    </div>
+                    <small class="text-muted mb-1">{{ review.createtime }}</small>
+                </div>
             {% endfor %}
         {% endif %}
     </div>

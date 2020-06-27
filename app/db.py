@@ -57,8 +57,9 @@ def get_review(bid, uid):
 
 
 def get_reviews(bid):
-    reviews = db.execute("""SELECT * FROM reviews WHERE book_id = :id""",
-                         {"id": bid})
+    reviews = db.execute("""SELECT username, review, rating, createtime FROM
+                         reviews LEFT JOIN users ON reviews.user_id = users.id
+                         WHERE book_id = :id""", {"id": bid})
     return reviews
 
 

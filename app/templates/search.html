@@ -12,10 +12,6 @@
     <div class="form-center my-3">
         <form action="" method="post" class="form-inline justify-content-center">
             {{ form.csrf_token }}
-            <!--
-            <input type="text" class="form-control" placeholder="ISBN, Title or Author" 
-            name="search" aria-label="Book search" aria-describedby="search-form">
-            -->
             <div class="form-group mb-0">
                 {{ form.query }}
             </div>
@@ -39,7 +35,7 @@
                 {% for book in books %}
                 <tr>
                     <th scope="col">{{ book.isbn }}</th>
-                    <th scope="col"><a href={{ url_for('book', book_id=book.id) }}>{{ book.title }}</a></th>
+                    <th scope="col"><a href={{ url_for('book', bid=book.id) }}>{{ book.title }}</a></th>
                     <th scope="col">{{ book.author }}</th>
                     <th scope="col">{{ book.year }}</th>
                 </tr>

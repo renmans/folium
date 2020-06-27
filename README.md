@@ -16,6 +16,8 @@ flask run
 
 ![Search](/app/static/img/search.png)
 
+![Book Page](/app/static/img/book.png)
+
 ## TODO
 * ~~Registration~~
 * ~~Login~~

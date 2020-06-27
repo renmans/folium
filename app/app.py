@@ -144,7 +144,7 @@ def logout():
     return redirect(url_for("index"))
 
 
-@app.route("/book/<int:book_id>", methods=['GET', 'POST'])
+@app.route("/book/<int:bid>", methods=['GET', 'POST'])
 def book(bid):
     # TODO: REPLACE WITH DECORATOR
     try:
