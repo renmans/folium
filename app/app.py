@@ -1,5 +1,5 @@
 import os
-# import requests
+import requests
 from hashlib import sha256
 
 from config import Config
@@ -39,6 +39,15 @@ def check_session():
             return redirect(url_for('search', name=session['user']))
     except KeyError:
         session['user'] = None
+
+
+def goodreads_rating(isbn):
+    key = app.config["API_KEY"]
+    res = requests.get("https://www.goodreads.com/book/review_counts.json",
+                       params={"key": key, "isbns": isbn})
+    rating = res.json()["books"][0]["average_rating"]
+    reviews_count = res.json()["books"][0]["work_ratings_count"]
+    return (rating, reviews_count)
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -161,6 +170,8 @@ def book(book_id):
     reviews = db.execute("""SELECT * FROM reviews WHERE book_id = :id""",
                          {"id": book_id})
 
+    gr_rating = goodreads_rating(book_data['isbn'])
+
     form = ReviewForm()
     if form.validate_on_submit():
         if reviews_counter == 0:
@@ -176,7 +187,7 @@ def book(book_id):
 
     return render_template('book.html', title=book_data['title'],
                            book=book_data, form=form, reviews=reviews,
-                           rating=avg_rating)
+                           rating=avg_rating, gr_rating=gr_rating)
 
 
 if __name__ == "__main__":

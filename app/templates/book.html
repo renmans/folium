@@ -19,12 +19,9 @@
                     <p class="card-text"><small class="text-dark">ISBN: {{ book.isbn }}</small></p>
                     <p class="card-text">Rating: {{ rating }}</p>
                     <p class="card-text">
-                        <a class="text-dark" href="https://www.goodreads.com/search?q={{ book.title }}">
-                            <u>
-                                GoodReads: 5
-                                <span class="text-muted">[20]</span>
-                            </u>
-                        </a>
+                        <a class="text-dark" href="https://www.goodreads.com/search?q={{ book.title }}"><u>GoodReads</u></a>: 
+                        {{ gr_rating[0] }}
+                        <span class="text-muted">[{{ gr_rating[1] }}]</span>
                     </p>
                 </div>
             </div>

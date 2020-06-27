@@ -24,5 +24,5 @@ flask run
 * ~~Search~~
 * ~~Book Page~~
 * ~~Review Submission~~
-* Goodreads Review Data
+* ~~Goodreads Review Data~~
 * API Access
