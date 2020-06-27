@@ -3,7 +3,7 @@ import os
 from hashlib import sha256
 
 from config import Config
-from forms import LoginForm, SignUpForm, SearchForm
+from forms import LoginForm, SignUpForm, SearchForm, ReviewForm
 
 from flask import (Flask, render_template, redirect, url_for, session, flash)
 from flask_session import Session
@@ -134,13 +134,15 @@ def logout():
 
 @app.route("/book/<int:book_id>")
 def book(book_id):
+    form = ReviewForm()
+
     try:
         if session['user']:
             book_data = db.execute(
                 """SELECT * FROM books WHERE id = :id;""",
                 {"id": book_id}).fetchone()
             return render_template('book.html', title=book_data['title'],
-                                   book=book_data)
+                                   book=book_data, form=form)
         else:
             return redirect(url_for('login'))
     except KeyError:

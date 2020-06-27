@@ -28,8 +28,26 @@
         </div>
     </div>
     <div class="container text-center">
-        <hr>
+        <br>
         <h3><strong>Reviews</strong></h3>
+        <hr>
+    </div>
+    <div class="container">
+        <form action="" method="post" novalidate>
+            {{ form.csrf_token }}
+            <div class="form-group text-center">
+                <label class="lead" for="reviewForm">Write your review</label>
+                {{ form.review }}
+            </div>
+            <label for="ratingForm">Rate it:</label>
+            <div class="form-group d-flex justify-content-between">
+                <div>
+                {{ form.rating }}
+                </div>
+                <button type="submit" class="btn btn-warning" id="reviewForm">Post</button>
+            </div>
+        </form>
+        <hr>
     </div>
 </div>
 {% endblock %}

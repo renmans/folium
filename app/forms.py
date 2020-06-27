@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import (StringField, PasswordField, BooleanField, SubmitField,
+                     TextAreaField, SelectField)
 from wtforms.validators import DataRequired, Length
 
 
@@ -21,3 +22,17 @@ class SearchForm(FlaskForm):
         "class": "form-control"
     })
     search = SubmitField('Search')
+
+
+class ReviewForm(FlaskForm):
+    review = TextAreaField("Review", validators=[DataRequired()], render_kw={
+        "class": "form-control",
+        "id": "reviewForm",
+        "rows": "3"
+    })
+    rating = SelectField("Rating", choices=[i for i in range(1, 6)],
+                         validators=[DataRequired()], render_kw={
+                             "class": "form-control",
+                             "id": "ratingForm"
+                         }, default=5)
+    post = SubmitField("Post")
