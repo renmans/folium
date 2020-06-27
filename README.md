@@ -23,7 +23,6 @@ flask run
 * ~~Import~~
 * ~~Search~~
 * ~~Book Page~~
-* Review Submission
-* Star Rating
+* ~~Review Submission~~
 * Goodreads Review Data
 * API Access

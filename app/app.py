@@ -143,6 +143,7 @@ def book(book_id):
     book_data = db.execute("""SELECT * FROM books WHERE id = :id;""",
                            {"id": book_id}).fetchone()
     book_id = book_data['id']
+
     uid = db.execute("""SELECT id FROM users WHERE username = :username;""",
                      {"username": session['user']}).fetchone()[0]
 
@@ -152,10 +153,13 @@ def book(book_id):
                                      {"bid": book_id,
                                       "uid": uid}).fetchone()[0])
 
-    avg_rating = round(float(db.execute("""SELECT AVG(rating) FROM reviews
-                                        WHERE book_id = :book_id""", {
-                                            "book_id": book_id
-                                        }).fetchone()[0]), 2)
+    avg_rating = db.execute("""SELECT AVG(rating) FROM reviews
+                            WHERE book_id = :book_id""", {"book_id": book_id}
+                            ).fetchone()[0]
+    avg_rating = round(float(avg_rating), 2) if avg_rating else 0
+
+    reviews = db.execute("""SELECT * FROM reviews WHERE book_id = :id""",
+                         {"id": book_id})
 
     form = ReviewForm()
     if form.validate_on_submit():
@@ -169,9 +173,6 @@ def book(book_id):
             db.commit()
         else:
             flash("You have already left a review")
-
-    reviews = db.execute("""SELECT * FROM reviews WHERE book_id = :id""",
-                         {"id": book_id})
 
     return render_template('book.html', title=book_data['title'],
                            book=book_data, form=form, reviews=reviews,
