@@ -3,4 +3,3 @@ Flask-Session
 Flask-WTF
 psycopg2-binary
 SQLAlchemy
-PyYaml
