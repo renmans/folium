@@ -5,29 +5,32 @@ Website with Book Reviews
 ```
 git clone https://github.com/renmans/folium.git
 pip3 install -r requirements.txt
-set FLASK_APP = app/app.py
+set FLASK_APP = app.py
 set DATABASE_URL = PostgreSQL URI
 set SECRET_KEY = Your secret key or os.urandom(<int>)
+set API_KEY = Your api key for GoodReads
 flask run
 ```
 
 ## Demo
-![Log In](/app/static/img/login.png)
+Folium on [Heroku](https://folium-app.herokuapp.com/)
 
-![Search](/app/static/img/search.png)
+![Log In](/static/img/login.png)
 
-![Book Page](/app/static/img/book.png)
+![Search](/static/img/search.png)
+
+![Book Page](/static/img/book.png)
 
 ## API
 
 #### Get information about a book by ISBN
 
-**URL:** /api/<isbn>
+**URL:** /api/\<isbn\>
 
 **HTTP method:** GET
 
 **Parameters:**
-    * isbn: The ISBN of the book to lookup.
+* isbn: The ISBN of the book to lookup.
 
 Response example:
 ```
@@ -50,4 +53,4 @@ Response example:
 * ~~Book Page~~
 * ~~Review Submission~~
 * ~~Goodreads Review Data~~
-* API Access
+* ~~API Access~~
