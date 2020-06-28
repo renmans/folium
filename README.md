@@ -50,4 +50,4 @@ Response example:
 * ~~Book Page~~
 * ~~Review Submission~~
 * ~~Goodreads Review Data~~
-* API Access
+* ~~API Access~~
