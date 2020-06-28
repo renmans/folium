@@ -3,5 +3,3 @@ flask_session
 __pycache__
 
 *.swp
-
-config.py
