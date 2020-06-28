@@ -35,6 +35,12 @@ def get_book(bid):
     return book
 
 
+def get_book_by_isbn(isbn):
+    book = db.execute("""SELECT * FROM books WHERE isbn = :isbn;""",
+                      {"isbn": isbn}).fetchone()
+    return book
+
+
 def get_uid(username):
     uid = db.execute("""SELECT id FROM users WHERE username = :username;""",
                      {"username": username}).fetchone()[0]

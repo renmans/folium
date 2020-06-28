@@ -1,15 +1,14 @@
-# TODO: Write decorator for required login
-# TODO: Write documentation for functions
-
 # stdlib modules
 import requests
 from hashlib import sha256
+from functools import wraps
 
 # SQLAlchemy modules
 from sqlalchemy.exc import IntegrityError
 
 # Flask modules
-from flask import (Flask, render_template, redirect, url_for, session, flash)
+from flask import (Flask, render_template, redirect, url_for, session, flash,
+                   jsonify)
 from flask_session import Session
 
 # App modules
@@ -34,16 +33,6 @@ def passwd_hash(p):
     return sha256(p.encode('utf-8')).hexdigest()
 
 
-def check_session():
-    # Redirect if user not logged out
-    # TODO: REPLACE WITH DECORATOR
-    try:
-        if session['user']:
-            return redirect(url_for('search', name=session['user']))
-    except KeyError:
-        session['user'] = None
-
-
 def goodreads_rating(isbn):
     """Take the book's ISBN and returns the rating on GoodReads"""
     key = app.config["API_KEY"]
@@ -54,11 +43,29 @@ def goodreads_rating(isbn):
     return (rating, reviews_count)
 
 
-@app.route("/", methods=['GET', 'POST'])
-def index():
-    # TODO: REPLACE WITH DECORATOR
-    check_session()
+def check_session(func):
+    """Redirect if user not logged out"""
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if session.get('user', None):
+            return redirect(url_for('search'))
+        return func(*args, **kwargs)
+    return wrapper
 
+
+def session_required(func):
+    """Redirect if user not logged in"""
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if session.get('user', None) is None:
+            return redirect(url_for('login'))
+        return func(*args, **kwargs)
+    return wrapper
+
+
+@app.route("/", methods=['GET', 'POST'])
+@check_session
+def index():
     action = "Sign Up"  # Content for buttons and forms
 
     form = SignUpForm()
@@ -74,19 +81,16 @@ def index():
             return render_template("index.html", title=action, form=form,
                                    action=action)
 
-        # TODO: SAME CODE #1
         session['user'] = username  # Remember current user
-        return redirect(url_for('search', name=username))
+        return redirect(url_for('search'))
 
     return render_template("index.html", title=action, form=form,
                            action=action)
 
 
 @app.route("/login", methods=['GET', 'POST'])
+@check_session
 def login():
-    # TODO: REPLACE WITH DECORATOR
-    check_session()
-
     action = "Log In"  # Content for buttons and forms
 
     form = LoginForm()
@@ -98,44 +102,14 @@ def login():
         except TypeError:
             username = None
 
-        # TODO: SAME CODE #1
         if username:
             session['user'] = username  # Remember current user
-            return redirect(url_for('search', name=username))
+            return redirect(url_for('search'))
         else:
             flash("Wrong email or password")
 
     return render_template("index.html", title=action, form=form,
                            action=action)
-
-
-@app.route("/search")
-@app.route("/search/<name>", methods=['GET', 'POST'])
-def search(name=None):
-    """Search function for a book by its ISBN, title, or author"""
-    # name is None when link is clicked
-    # TODO: REPLACE WITH DECORATOR
-    if name is None:
-        try:
-            if session['user']:
-                return redirect(url_for('search', name=session['user']))
-        except KeyError:
-            return redirect(url_for('login'))
-
-    # if user is not auth then redirect them to login page
-    # TODO: REPLACE WITH DECORATOR
-    if session['user'] != name:
-        return redirect(url_for('login'))
-
-    form = SearchForm()
-    if form.validate_on_submit():
-        query = '%' + form.query.data + '%'
-        books = db.get_books(query)
-
-        return render_template("search.html", name=name, title="Search",
-                               form=form, books=books)
-
-    return render_template("search.html", name=name, title="Search", form=form)
 
 
 @app.route("/logout")
@@ -144,15 +118,24 @@ def logout():
     return redirect(url_for("index"))
 
 
-@app.route("/book/<int:bid>", methods=['GET', 'POST'])
-def book(bid):
-    # TODO: REPLACE WITH DECORATOR
-    try:
-        if session['user']:
-            pass
-    except KeyError:
-        return redirect(url_for('login'))
+@app.route("/search", methods=['GET', 'POST'])
+@session_required
+def search():
+    """Search function for a book by its ISBN, title, or author"""
+    form = SearchForm()
+    if form.validate_on_submit():
+        query = '%' + form.query.data + '%'
+        books = db.get_books(query)
 
+        return render_template("search.html", title="Search",
+                               form=form, books=books)
+
+    return render_template("search.html", title="Search", form=form)
+
+
+@app.route("/book/<int:bid>", methods=['GET', 'POST'])
+@session_required
+def book(bid):
     # Information about the book
     book = db.get_book(bid)
 
@@ -177,9 +160,26 @@ def book(bid):
         else:
             flash("You have already left a review")
 
+        return redirect(url_for('book', bid=bid))
+
     return render_template('book.html', title=book['title'],
                            book=book, form=form, reviews=reviews,
                            rating=avg_rating, gr_rating=gr_rating)
+
+
+@app.route("/api/<isbn>")
+def api(isbn):
+    book = db.get_book_by_isbn(isbn)
+    rating, review_count = goodreads_rating(isbn)
+    response = {
+        "title": book["title"],
+        "author": book["author"],
+        "year": book["year"],
+        "isbn": isbn,
+        "review_count": review_count,
+        "average_score": rating
+    }
+    return jsonify(response)
 
 
 if __name__ == "__main__":

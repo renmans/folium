@@ -18,6 +18,27 @@ flask run
 
 ![Book Page](/app/static/img/book.png)
 
+## API
+
+### Get information about a book by ISBN
+
+**URL:** /api/<isbn>
+**HTTP method:** GET
+**Parameters:**
+    * isbn: The ISBN of the book to lookup.
+
+Response example:
+```
+{
+    "title": "Memory",
+    "author": "Doug Lloyd",
+    "year": 2015,
+    "isbn": "1632168146",
+    "review_count": 28,
+    "average_score": 5.0
+}
+```
+
 ## TODO
 * ~~Registration~~
 * ~~Login~~
