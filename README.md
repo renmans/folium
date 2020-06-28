@@ -20,10 +20,12 @@ flask run
 
 ## API
 
-### Get information about a book by ISBN
+#### Get information about a book by ISBN
 
 **URL:** /api/<isbn>
+
 **HTTP method:** GET
+
 **Parameters:**
     * isbn: The ISBN of the book to lookup.
 
